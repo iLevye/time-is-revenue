@@ -1,0 +1,25 @@
+{
+  "name": "timer.jquery",
+  "ignore": [
+    ".gitignore",
+    ".travis.yml",
+    "Gruntfile.js",
+    "package.json",
+    "test"
+  ],
+  "dependencies": {
+    "jquery": ">=1.9.0"
+  },
+  "homepage": "https://github.com/walmik/timer.jquery",
+  "version": "0.7.1",
+  "_release": "0.7.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.7.1",
+    "commit": "ba060eaa86a77786d85ccf1eef66865ae951d566"
+  },
+  "_source": "https://github.com/walmik/timer.jquery.git",
+  "_target": "^0.7.1",
+  "_originalSource": "timer.jquery",
+  "_direct": true
+}

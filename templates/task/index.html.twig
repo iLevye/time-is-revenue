@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task index{% endblock %}
+
+{% block body %}
+    <h1>Task index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Description</th>
+                <th>IsBillable</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+            <tr data-taskid="{{ task.id }}" data-elapsed="{{ task.elapsedTime }}" data-running="{{ task.isRunning ? '1' : '0'}}" data-startedAt="{{ task.lastTimeStartedAt | date('Y-m-d H:i:s') }}">
+                {% if task.isRunning %}
+                    <script type="text/javascript">
+                        $(document).ready(function(){
+                           $("#timer_task_{{ task.id }}").timer({
+                               seconds: {{ task.elapsedTime }}
+                           });
+                            $("#timer_task_{{ task.id }}").parents("td").find(".stop-timer").removeClass("d-none");
+                        });
+                    </script>
+                {% else %}
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#timer_task_{{ task.id }}").parents("td").find(".start-timer").removeClass("d-none");
+                            $("#timer_task_{{ task.id }}").parents("td").find(".elapsedTime").html("{{ task.elapsedTime }}".toHHMMSS());
+                            $("#timer_task_{{ task.id }}").parents("td").find(".elapsedTime").data("seconds", "{{ task.elapsedTime }}");
+                        });
+                    </script>
+                {% endif %}
+                <td>
+                    <button class="start-timer d-none">start</button>
+                    <button class="stop-timer d-none">stop</button>
+                    <div class="timer" id="timer_task_{{ task.id }}"></div>
+                    <div class="elapsedTime"></div>
+                </td>
+                <td>{{ task.id }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.isBillable ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('task_show', {'id': task.id}) }}">show</a>
+                    <a href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('task_new') }}">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/bower_components/timer.jquery/dist/timer.jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".start-timer").click(function(){
+                var taskId = $(this).parents("tr").data("taskid");
+                var td = $(this).parents("td");
+                $.post("/task/" + taskId + "/start", null, function(d){
+                    if(d.success){
+                        var seconds = td.find(".elapsedTime").data("seconds");
+                        td.find(".timer").timer({
+                            seconds : seconds
+                        });
+                        td.find(".start-timer").addClass("d-none");
+                        td.find(".stop-timer").removeClass("d-none");
+                        td.find(".elapsedTime").remove();
+                    }else{
+                        alert(d.message);
+                    }
+
+                });
+            });
+
+            $(".stop-timer").click(function(){
+                var taskId = $(this).parents("tr").data("taskid");
+                var td = $(this).parents("td");
+                $.post("/task/" + taskId + "/stop", null, function(d){
+                    if(d.success){
+                        location.reload();
+                    }else{
+                        alert(d.message);
+                    }
+                });
+            });
+        });
+
+        String.prototype.toHHMMSS = function () {
+            var sec_num = parseInt(this, 10); // don't forget the second param
+            var hours   = Math.floor(sec_num / 3600);
+            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+            var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+            if (hours   < 10) {hours   = "0"+hours;}
+            if (minutes < 10) {minutes = "0"+minutes;}
+            if (seconds < 10) {seconds = "0"+seconds;}
+            return hours+':'+minutes+':'+seconds;
+        }
+    </script>
+{% endblock %}
