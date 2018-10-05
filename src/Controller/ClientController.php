@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Client;
+use App\Entity\User;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,6 +34,11 @@ class ClientController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Client $client */
+            $client = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $client->setWorkspace($user->getWorkspaces()[0]);
             $em = $this->getDoctrine()->getManager();
             $em->persist($client);
             $em->flush();

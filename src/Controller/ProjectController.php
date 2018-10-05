@@ -33,6 +33,11 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Client $client */
+            $client = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $client->setWorkspace($user->getWorkspaces()[0]);
             $em = $this->getDoctrine()->getManager();
             $em->persist($project);
             $em->flush();

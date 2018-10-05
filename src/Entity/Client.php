@@ -28,6 +28,12 @@ class Client
      */
     private $projects;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Workspace", inversedBy="clients")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $workspace;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -84,5 +90,17 @@ class Client
     function __toString()
     {
         return $this->getName();
+    }
+
+    public function getWorkspace(): ?Workspace
+    {
+        return $this->workspace;
+    }
+
+    public function setWorkspace(?Workspace $workspace): self
+    {
+        $this->workspace = $workspace;
+
+        return $this;
     }
 }

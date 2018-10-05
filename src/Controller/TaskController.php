@@ -30,7 +30,7 @@ class TaskController extends Controller
         /** @var TimeRepository $timeRepository */
         $timeRepository = $em->getRepository(Time::class);
 
-        $tasks = $taskRepository->findAll();
+        $tasks = $taskRepository->getLastTasks();
         foreach($tasks as $task){
             $runningTime = $timeRepository->findRunningTime($task);
             if ($runningTime){
