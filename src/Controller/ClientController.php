@@ -30,7 +30,6 @@ class ClientController extends Controller
      */
     public function new(Request $request): Response
     {
-        $user = $this->getUser();
         $client = new Client();
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
@@ -40,15 +39,16 @@ class ClientController extends Controller
             $client = $form->getData();
             /** @var User $user */
             $user = $this->getUser();
-            if(isset($user->getWorkspaces()[0])){
+            $em = $this->getDoctrine()->getManager();
+            if(!isset($user->getWorkspaces()[0])){
                 $newWorkspace = new Workspace();
                 $newWorkspace->setOwner($user);
                 $newWorkspace->setName("My First Workspace");
                 $client->setWorkspace($newWorkspace);
+                $em->persist($newWorkspace);
+            }else{
+                $client->setWorkspace($user->getWorkspaces()[0]);
             }
-            $client->setWorkspace($user->getWorkspaces()[0]);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newWorkspace);
             $em->persist($client);
             $em->flush();
 
