@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\User;
+use App\Entity\Workspace;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,6 +30,7 @@ class ClientController extends Controller
      */
     public function new(Request $request): Response
     {
+        $user = $this->getUser();
         $client = new Client();
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
@@ -38,8 +40,15 @@ class ClientController extends Controller
             $client = $form->getData();
             /** @var User $user */
             $user = $this->getUser();
+            if(isset($user->getWorkspaces()[0])){
+                $newWorkspace = new Workspace();
+                $newWorkspace->setOwner($user);
+                $newWorkspace->setName("My First Workspace");
+                $client->setWorkspace($newWorkspace);
+            }
             $client->setWorkspace($user->getWorkspaces()[0]);
             $em = $this->getDoctrine()->getManager();
+            $em->persist($newWorkspace);
             $em->persist($client);
             $em->flush();
 
