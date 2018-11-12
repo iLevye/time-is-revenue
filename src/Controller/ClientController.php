@@ -22,7 +22,10 @@ class ClientController extends Controller
      */
     public function index(ClientRepository $clientRepository): Response
     {
-        return $this->render('client/index.html.twig', ['clients' => $clientRepository->findAll()]);
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        return $this->render('client/index.html.twig', ['clients' => $clientRepository->findBy(['workspace' => $workspace])]);
     }
 
     /**

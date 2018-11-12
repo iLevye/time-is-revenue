@@ -49,12 +49,18 @@ class Workspace
      */
     private $clients;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="workspace")
+     */
+    private $tasks;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->clients = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,6 +186,37 @@ class Workspace
             // set the owning side to null (unless already changed)
             if ($client->getWorkspace() === $this) {
                 $client->setWorkspace(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setWorkspace($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+            // set the owning side to null (unless already changed)
+            if ($task->getWorkspace() === $this) {
+                $task->setWorkspace(null);
             }
         }
 

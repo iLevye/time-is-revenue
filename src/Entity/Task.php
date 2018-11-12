@@ -53,6 +53,12 @@ class Task
      */
     private $times;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Workspace", inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $workspace;
+
     public function __construct()
     {
         $this->times = new ArrayCollection();
@@ -176,6 +182,18 @@ class Task
     public function setLastTimeStartedAt(\DateTime $lastTimeStartedAt)
     {
         $this->lastTimeStartedAt = $lastTimeStartedAt;
+    }
+
+    public function getWorkspace(): ?Workspace
+    {
+        return $this->workspace;
+    }
+
+    public function setWorkspace(?Workspace $workspace): self
+    {
+        $this->workspace = $workspace;
+
+        return $this;
     }
 
 

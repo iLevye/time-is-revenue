@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\Task;
 use App\Entity\Time;
 use App\Form\TaskType;
@@ -24,11 +25,17 @@ class TaskController extends Controller
      */
     public function index(TaskRepository $taskRepository): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $taskRepository->setWorkspace($workspace);
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var TimeRepository $timeRepository */
         $timeRepository = $em->getRepository(Time::class);
+
 
         $tasks = $taskRepository->getLastTasks();
         foreach($tasks as $task){
@@ -63,11 +70,17 @@ class TaskController extends Controller
      */
     public function new(Request $request): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $projects = $this->getDoctrine()->getRepository(Project::class)->findBy(['workspace' => $workspace]);
+
         $task = new Task();
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(TaskType::class, $task, ['projects' => $projects]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $task->setWorkspace($workspace);
             $em = $this->getDoctrine()->getManager();
             $em->persist($task);
             $em->flush();

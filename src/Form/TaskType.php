@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Project;
 use App\Entity\Task;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,7 +16,10 @@ class TaskType extends AbstractType
         $builder
             ->add('description')
             ->add('isBillable')
-            ->add('project')
+            ->add('project', EntityType::class, [
+                'class' => Project::class,
+                'choices' => $options['projects']
+            ])
         ;
     }
 
@@ -22,6 +27,7 @@ class TaskType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Task::class,
+            'projects' => null
         ]);
     }
 }

@@ -14,9 +14,20 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class TaskRepository extends ServiceEntityRepository
 {
+
+    public $workspace;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Task::class);
+    }
+
+    /**
+     * @param mixed $workspace
+     */
+    public function setWorkspace($workspace)
+    {
+        $this->workspace = $workspace;
     }
 
     /**
@@ -27,6 +38,8 @@ class TaskRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             //->andWhere('t.exampleField = :val')
             //->setParameter('val', $value)
+            ->where("t.workspace = :workspace")
+            ->setParameter('workspace', $this->workspace)
             ->orderBy('t.id', 'DESC')
             ->setMaxResults(10)
             ->getQuery()

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
 use App\Entity\Project;
+use App\Entity\User;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,7 +22,11 @@ class ProjectController extends Controller
      */
     public function index(ProjectRepository $projectRepository): Response
     {
-        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAll()]);
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+
+        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findBy(['workspace' => $workspace])]);
     }
 
     /**
@@ -28,8 +34,14 @@ class ProjectController extends Controller
      */
     public function new(Request $request): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findBy(['workspace' => $workspace]);
+
         $project = new Project();
-        $form = $this->createForm(ProjectType::class, $project);
+        /** @var ProjectType $form */
+        $form = $this->createForm(ProjectType::class, $project, ['clients' => $clients]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
