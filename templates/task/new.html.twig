@@ -8,4 +8,32 @@
     {{ include('task/_form.html.twig') }}
 
     <a href="{{ path('task_index') }}">back to list</a>
+
+    <script>
+        var projects = [];
+        {% for project in projects %}
+        projects.push({ id: {{ project.id }}, rate: {{ project.billableRate }} });
+        {% endfor %}
+        console.log(projects);
+
+        $(document).ready(function(){
+            setRate(getProjectRate($("#task_project").val()));
+            $("#task_project").change(function(){
+                var id = $(this).val();
+                setRate(getProjectRate(id));
+            });
+        });
+
+        function getProjectRate(id){
+            for(var i in projects){
+                if (projects[i].id == id){
+                    return projects[i].rate;
+                }
+            }
+        }
+
+        function setRate(rate){
+            $("#task_billableRate").val(rate);
+        }
+    </script>
 {% endblock %}

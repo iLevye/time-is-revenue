@@ -39,6 +39,11 @@ class Project
      */
     private $workspace;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $billableRate;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -117,6 +122,18 @@ class Project
     public function setWorkspace(?Workspace $workspace): self
     {
         $this->workspace = $workspace;
+
+        return $this;
+    }
+
+    public function getBillableRate(): ?float
+    {
+        return $this->billableRate;
+    }
+
+    public function setBillableRate(float $billableRate): self
+    {
+        $this->billableRate = $billableRate;
 
         return $this;
     }

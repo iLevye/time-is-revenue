@@ -15,11 +15,13 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('description')
+            ->add('billableRate')
             ->add('isBillable')
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choices' => $options['projects']
             ])
+
         ;
     }
 

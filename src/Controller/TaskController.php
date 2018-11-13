@@ -91,6 +91,7 @@ class TaskController extends Controller
         return $this->render('task/new.html.twig', [
             'task' => $task,
             'form' => $form->createView(),
+            'projects' => $projects
         ]);
     }
 

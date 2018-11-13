@@ -22,6 +22,8 @@ class ProjectType extends AbstractType
                 'class' => Client::class,
                 'choices' => $options['clients']
             ])
+            ->add('billableRate')
+
         ;
     }
 
