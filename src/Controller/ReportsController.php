@@ -21,7 +21,6 @@ class ReportsController extends AbstractController
         $data = $timeRepository->getRevenuesByProjects($workspace);
 
         $payments = $timeRepository->getRevenueAndPaymentsByClient($workspace);
-        dump($payments);
 
         return $this->render('reports/index.html.twig', [
             'data' => $data,
