@@ -9,16 +9,32 @@
     <h2>Clients</h2>
 
     <table class="table table-bordered col-12 col-sm-6 offset-sm-3" style="margin-top:30px;">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Revenue</th>
+                <th>Paid</th>
+                <th>Unpaid</th>
+            </tr>
+        </thead>
         <tbody>
+        {% set total = 0 %}
         {% for row in payments %}
             <tr>
                 <td>{{ row.client_name }}</td>
-                <td>{{ row.revenue | round }} TL</td>
-                <td>{{ row.paymentAmount | round }} TL</td>
-                <td>{{ row.revenue - row.paymentAmount }} TL</td>
+                <td>{{ row.revenue | number_format(2) }} TL</td>
+                <td>{{ row.paymentAmount | number_format(2) }} TL</td>
+                <td>{{ (row.revenue - row.paymentAmount) | number_format(2) }} TL</td>
+                {% set total = total + row.revenue - row.paymentAmount %}
             </tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td>{{ total }}</td>
+            </tr>
+        </tfoot>
     </table>
 
     <h2>Projects</h2>

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Client;
 use App\Entity\Task;
 use App\Entity\Time;
 use App\Entity\Workspace;
@@ -101,12 +102,34 @@ class TimeRepository extends ServiceEntityRepository
             ->where('task.isBillable = :billable')
             ->andWhere('time.finishDate is not null')
             ->andWhere('client.workspace = :workspace')
+            ->andWhere('client.isArchived = :isArchived')
             ->setParameters([
                 'workspace' => $workspace,
                 'billable' => true,
+                'isArchived' => false
             ])
             ->groupBy('client.id')
             ->orderBy('client.id')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getClientTimesheet(Client $client, \DateTime $startDate, \DateTime $endDate){
+        return $this->createQueryBuilder('time')
+            ->select('time.startDate as date, client.name as client_name, timestampdiff(SECOND, time.startDate, time.finishDate) / 60 / 60 as hours, task.billableRate, task.isBillable')
+            ->leftJoin('time.task', 'task')
+            ->leftJoin('task.project', 'project')
+            ->leftJoin('project.client', 'client')
+            ->andWhere('time.finishDate is not null')
+            ->andWhere('client = :client')
+            ->andWhere('time.startDate > :startDate')
+            ->andWhere('time.startDate < :endDate')
+            ->setParameters([
+                'client' => $client,
+                'startDate' => $startDate,
+                'endDate' => $endDate
+            ])
+            ->orderBy('time.id', 'desc')
             ->getQuery()
             ->getArrayResult();
     }

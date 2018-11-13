@@ -39,6 +39,11 @@ class Client
      */
     private $payments;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isArchived = false;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -137,6 +142,18 @@ class Client
                 $payment->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): self
+    {
+        $this->isArchived = $isArchived;
 
         return $this;
     }
