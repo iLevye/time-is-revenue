@@ -44,6 +44,11 @@ class Project
      */
     private $billableRate;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isArchived;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -134,6 +139,18 @@ class Project
     public function setBillableRate(float $billableRate): self
     {
         $this->billableRate = $billableRate;
+
+        return $this;
+    }
+
+    public function getIsArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): self
+    {
+        $this->isArchived = $isArchived;
 
         return $this;
     }

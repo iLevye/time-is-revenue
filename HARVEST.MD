@@ -1,0 +1,1 @@
+#insert into project select null, (select id from client where name = min(Client)) as client_id, Project, 4 Client from harvest_time_report group by Project

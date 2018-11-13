@@ -64,6 +64,11 @@ class Task
      */
     private $billableRate;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $asanaUrl;
+
     public function __construct()
     {
         $this->times = new ArrayCollection();
@@ -209,6 +214,18 @@ class Task
     public function setBillableRate(float $billableRate): self
     {
         $this->billableRate = $billableRate;
+
+        return $this;
+    }
+
+    public function getAsanaUrl(): ?string
+    {
+        return $this->asanaUrl;
+    }
+
+    public function setAsanaUrl(?string $asanaUrl): self
+    {
+        $this->asanaUrl = $asanaUrl;
 
         return $this;
     }

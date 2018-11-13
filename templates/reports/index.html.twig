@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reports{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <h2>Clients</h2>
+
+    <table class="table table-bordered col-12 col-sm-6 offset-sm-3" style="margin-top:30px;">
+        <tbody>
+        {% for row in payments %}
+            <tr>
+                <td>{{ row.client_name }}</td>
+                <td>{{ row.revenue | round }} TL</td>
+                <td>{{ row.paymentAmount | round }} TL</td>
+                <td>{{ row.revenue - row.paymentAmount }} TL</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Projects</h2>
+
+    <table class="table table-bordered col-12 col-sm-6 offset-sm-3" style="margin-top:30px;">
+        <tbody>
+            {% set last_client = '' %}
+            {% for row in data %}
+                {% if last_client != row.client_name %}
+                    {% set last_client = row.client_name %}
+                    <tr style="background: lightgray">
+                        <td colspan="2">{{ row.client_name }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>{{ row.project_name }}</td>
+                    <td>{{ row.revenue | round }} TL</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

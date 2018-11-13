@@ -41,7 +41,7 @@ class TaskRepository extends ServiceEntityRepository
             ->where("t.workspace = :workspace")
             ->setParameter('workspace', $this->workspace)
             ->orderBy('t.id', 'DESC')
-            ->setMaxResults(10)
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;

@@ -34,9 +34,15 @@ class Client
      */
     private $workspace;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Payment", mappedBy="client")
+     */
+    private $payments;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +106,37 @@ class Client
     public function setWorkspace(?Workspace $workspace): self
     {
         $this->workspace = $workspace;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Payment[]
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->contains($payment)) {
+            $this->payments->removeElement($payment);
+            // set the owning side to null (unless already changed)
+            if ($payment->getClient() === $this) {
+                $payment->setClient(null);
+            }
+        }
 
         return $this;
     }

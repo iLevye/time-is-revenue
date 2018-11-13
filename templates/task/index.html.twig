@@ -9,7 +9,7 @@
         <thead>
             <tr>
                 <th></th>
-                <th>Id</th>
+                <th>Project</th>
                 <th>Description</th>
                 <th>IsBillable</th>
                 <th>actions</th>
@@ -42,8 +42,11 @@
                     <div class="timer" id="timer_task_{{ task.id }}"></div>
                     <div class="elapsedTime"></div>
                 </td>
-                <td>{{ task.id }}</td>
-                <td>{{ task.description }}</td>
+                <td>{{ task.project.name }}</td>
+                <td>{{ task.description }}
+                    {% if task.asanaUrl %}
+                        <a href="{{ task.asanaUrl }}" target="_blank">asana</a>
+                    {% endif %}</td>
                 <td>{{ task.isBillable ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('task_show', {'id': task.id}) }}">show</a>

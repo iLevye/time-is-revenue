@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Task;
 use App\Entity\Time;
+use App\Entity\Workspace;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -66,6 +68,47 @@ class TimeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult()
             ;
+    }
+
+    public function getRevenuesByProjects(Workspace $workspace){
+        return $this->createQueryBuilder('time')
+            ->select('client.name as client_name, project.name as project_name, SUM(timestampdiff(SECOND, time.startDate, time.finishDate) / 60 / 60 * task.billableRate) as revenue')
+            ->leftJoin('time.task', 'task')
+            ->leftJoin('task.project', 'project')
+            ->leftJoin('project.client', 'client')
+            ->where('task.isBillable = :billable')
+            ->andWhere('time.finishDate is not null')
+            ->andWhere('client.workspace = :workspace')
+            ->andWhere('project.isArchived = :isArchived')
+            ->setParameters([
+                'workspace' => $workspace,
+                'billable' => true,
+                'isArchived' => false
+            ])
+            ->groupBy('project.id')
+            ->orderBy('client.id')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getRevenueAndPaymentsByClient(Workspace $workspace){
+        return $this->createQueryBuilder('time')
+            ->select('client.name as client_name, SUM(timestampdiff(SECOND, time.startDate, time.finishDate) / 60 / 60 * task.billableRate) as revenue')
+            ->addSelect('(select sum(payment.amount) from App\Entity\Payment payment where payment.client = client) as paymentAmount')
+            ->leftJoin('time.task', 'task')
+            ->leftJoin('task.project', 'project')
+            ->leftJoin('project.client', 'client')
+            ->where('task.isBillable = :billable')
+            ->andWhere('time.finishDate is not null')
+            ->andWhere('client.workspace = :workspace')
+            ->setParameters([
+                'workspace' => $workspace,
+                'billable' => true,
+            ])
+            ->groupBy('client.id')
+            ->orderBy('client.id')
+            ->getQuery()
+            ->getArrayResult();
     }
 
 }
