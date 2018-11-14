@@ -69,9 +69,15 @@ class Task
      */
     private $asanaUrl;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $date;
+
     public function __construct()
     {
         $this->times = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -226,6 +232,18 @@ class Task
     public function setAsanaUrl(?string $asanaUrl): self
     {
         $this->asanaUrl = $asanaUrl;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

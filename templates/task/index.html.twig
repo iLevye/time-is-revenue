@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th>Date</th>
                 <th>Project</th>
                 <th>Description</th>
                 <th>IsBillable</th>
@@ -42,6 +43,7 @@
                     <div class="timer" id="timer_task_{{ task.id }}"></div>
                     <div class="elapsedTime"></div>
                 </td>
+                <td>{{ task.date | date('Y-m-d') }}</td>
                 <td>{{ task.project.name }}</td>
                 <td>{{ task.description }}
                     {% if task.asanaUrl %}

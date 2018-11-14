@@ -116,7 +116,7 @@ class TimeRepository extends ServiceEntityRepository
 
     public function getClientTimesheet(Client $client, \DateTime $startDate, \DateTime $endDate){
         return $this->createQueryBuilder('time')
-            ->select('task.description, task.asanaUrl, project.name as project_name, time.startDate as date, client.name as client_name, timestampdiff(SECOND, time.startDate, time.finishDate) / 60 / 60 as hours, task.billableRate, task.isBillable')
+            ->select('task.date, task.description, task.asanaUrl, project.name as project_name, client.name as client_name, sum(timestampdiff(SECOND, time.startDate, time.finishDate)) / 60 / 60 as hours, task.billableRate, task.isBillable')
             ->leftJoin('time.task', 'task')
             ->leftJoin('task.project', 'project')
             ->leftJoin('project.client', 'client')
@@ -129,7 +129,8 @@ class TimeRepository extends ServiceEntityRepository
                 'startDate' => $startDate,
                 'endDate' => $endDate
             ])
-            ->orderBy('time.id', 'desc')
+            ->groupBy('task.id')
+            ->orderBy('task.id', 'desc')
             ->getQuery()
             ->getArrayResult();
     }
