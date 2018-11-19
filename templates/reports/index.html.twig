@@ -15,6 +15,7 @@
                 <th>Revenue</th>
                 <th>Paid</th>
                 <th>Unpaid</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +26,9 @@
                 <td>{{ row.revenue | number_format(2) }} TL</td>
                 <td>{{ row.paymentAmount | number_format(2) }} TL</td>
                 <td>{{ (row.revenue - row.paymentAmount) | number_format(2) }} TL</td>
+                <td>
+                    <button class="btn btn-outline-success btn-xs">Archive</button>
+                </td>
                 {% set total = total + row.revenue - row.paymentAmount %}
             </tr>
         {% endfor %}
