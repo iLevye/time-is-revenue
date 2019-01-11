@@ -41,17 +41,15 @@ label, div, span, a
 ::-ms-scrollbar-thumb           { background:    #888; }
 ::-ms-scrollbar-thumb:hover     { background:    #555; }
 
-/*body
+body
 {
-	background-image: url('../img/810.jpg');
-	background-position: center;
-	background-size: 250px;
-}*/
+	background-color: #ECF0F1;
+}
 
 *.wrapper
 {
 	width: 100%;
-	max-width: 1000px;
+	max-width: 1200px;
 	padding: 0 30px;
 	margin: auto;
 	box-sizing: border-box;
