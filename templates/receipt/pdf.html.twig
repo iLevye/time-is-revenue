@@ -1,79 +1,94 @@
-<table>
-    <tr>
-        <td>
-            <table>
-                <tr>
-                    <td>
-                        <table width="400">
-                            <tr>
-                                <td>{{ receipt.user.invoiceSettings.name }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ receipt.user.invoiceSettings.email }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ receipt.user.invoiceSettings.tckimlik }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ receipt.user.invoiceSettings.address }}</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <table width="400" style="text-align: right;">
-                            <tr>
-                                <td>{{ receipt.client.invoiceEmail }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ receipt.client.invoiceName }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ receipt.client.invoiceAddress }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ receipt.client.btw}}</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: center; font-size: 24px;">
-                        Receipt {{ receipt.id }}
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table width="800">
-                <thead>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <table>
                     <tr>
-                        <td>Date</td>
-                        <td>Notes</td>
-                        <td>Time</td>
-                        <td>Rate</td>
-                        <td>Price</td>
+                        <td>
+                            <table width="500">
+                                <tr>
+                                    <td>{{ receipt.user.invoiceSettings.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ receipt.user.invoiceSettings.email }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ receipt.user.invoiceSettings.tckimlik }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ receipt.user.invoiceSettings.address }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table width="500" style="text-align: right;">
+                                <tr>
+                                    <td>{{ receipt.client.invoiceEmail }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ receipt.client.invoiceName }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ receipt.client.invoiceAddress }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ receipt.client.btw}}</td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
-                </thead>
-                {% for task in receipt.tasks %}
                     <tr>
-                        <td>{{ task.date | date('Y-m-d') }}</td>
-                        <td>{{ task.description }}</td>
-                        <td>{{ task.receiptTime }}</td>
-                        <td>{{ task.billableRate }}</td>
-                        <td>{{ task.receiptPrice }}</td>
+                        <td colspan="2" style="text-align: center; font-size: 24px;">
+                            Receipt {{ receipt.id }}
+                        </td>
                     </tr>
-                {% endfor %}
-                <tfoot style="border: 1px solid black;">
-                    <tr>
-                        <td colspan="2">TOTALS</td>
-                        <td>{{ receipt.totalHours }}</td>
-                        <td></td>
-                        <td>{{ receipt.totalPrice }}</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </td>
-    </tr>
-</table>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="800" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Date</td>
+                            <td>Notes</td>
+                            <td>Time</td>
+                            <td>Rate (Hourly)</td>
+                            <td>Price</td>
+                        </tr>
+                    </thead>
+                    {% for task in receipt.tasks %}
+                        <tr style="line-height: 20px;">
+                            <td>{{ task.date | date('Y-m-d') }}</td>
+                            <td>{{ task.project.name }} {{ task.description }}</td>
+                            <td>{{ task.receiptTime | number_format(2)  }}</td>
+                            <td>{{ task.billableRate }} TL</td>
+                            <td>{{ task.receiptPrice | number_format(2)  }} TL</td>
+                        </tr>
+                    {% endfor %}
+                    <tfoot style="border: 1px solid black;">
+                        <tr>
+                            <td colspan="2">TOTALS</td>
+                            <td>{{ receipt.totalHours | number_format(2) }}</td>
+                            <td></td>
+                            <td>{{ receipt.totalPrice | number_format(2) }} TL</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
