@@ -1,0 +1,79 @@
+<table>
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <table width="400">
+                            <tr>
+                                <td>{{ receipt.user.invoiceSettings.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ receipt.user.invoiceSettings.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ receipt.user.invoiceSettings.tckimlik }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ receipt.user.invoiceSettings.address }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table width="400" style="text-align: right;">
+                            <tr>
+                                <td>{{ receipt.client.invoiceEmail }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ receipt.client.invoiceName }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ receipt.client.invoiceAddress }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ receipt.client.btw}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; font-size: 24px;">
+                        Receipt {{ receipt.id }}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="800">
+                <thead>
+                    <tr>
+                        <td>Date</td>
+                        <td>Notes</td>
+                        <td>Time</td>
+                        <td>Rate</td>
+                        <td>Price</td>
+                    </tr>
+                </thead>
+                {% for task in receipt.tasks %}
+                    <tr>
+                        <td>{{ task.date | date('Y-m-d') }}</td>
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.receiptTime }}</td>
+                        <td>{{ task.billableRate }}</td>
+                        <td>{{ task.receiptPrice }}</td>
+                    </tr>
+                {% endfor %}
+                <tfoot style="border: 1px solid black;">
+                    <tr>
+                        <td colspan="2">TOTALS</td>
+                        <td>{{ receipt.totalHours }}</td>
+                        <td></td>
+                        <td>{{ receipt.totalPrice }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </td>
+    </tr>
+</table>

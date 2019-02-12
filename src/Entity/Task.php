@@ -74,6 +74,21 @@ class Task
      */
     private $date;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Receipt", inversedBy="tasks")
+     */
+    private $receipt;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $receiptTime;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $receiptPrice;
+
     public function __construct()
     {
         $this->times = new ArrayCollection();
@@ -244,6 +259,42 @@ class Task
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getReceipt(): ?Receipt
+    {
+        return $this->receipt;
+    }
+
+    public function setReceipt(?Receipt $receipt): self
+    {
+        $this->receipt = $receipt;
+
+        return $this;
+    }
+
+    public function getReceiptTime(): ?float
+    {
+        return $this->receiptTime;
+    }
+
+    public function setReceiptTime(?float $ReceiptTime): self
+    {
+        $this->receiptTime = $ReceiptTime;
+
+        return $this;
+    }
+
+    public function getReceiptPrice(): ?float
+    {
+        return $this->receiptPrice;
+    }
+
+    public function setReceiptPrice(float $ReceiptPrice): self
+    {
+        $this->receiptPrice = $ReceiptPrice;
 
         return $this;
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "68b9584c4c6728f12fd653af2f42726e",
+    "content-hash": "9a5330a890d5c205dfcdcf135219111a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -939,12 +939,12 @@
             "version": "v2.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "shasum": ""
             },
@@ -1279,6 +1279,48 @@
                 "rest"
             ],
             "time": "2016-10-17T18:31:11+00:00"
+        },
+        {
+            "name": "fpdf/fpdf",
+            "version": "1.81.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coreydoughty/Fpdf.git",
+                "reference": "6be5dd7dd0b3077b565ecadb28e7f01f7d2f2185"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coreydoughty/Fpdf/zipball/6be5dd7dd0b3077b565ecadb28e7f01f7d2f2185",
+                "reference": "6be5dd7dd0b3077b565ecadb28e7f01f7d2f2185",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fpdf\\": "src/Fpdf"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Corey Doughty",
+                    "email": "corey@doughty.ca"
+                }
+            ],
+            "description": "FPDF Composer Wrapper",
+            "homepage": "https://github.com/coreydoughty/Fpdf",
+            "keywords": [
+                "fpdf",
+                "pdf",
+                "wrapper"
+            ],
+            "time": "2018-10-25T10:38:10+00:00"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -3511,6 +3553,7 @@
             ],
             "description": "Enforces Long Term Supported versions of Symfony components",
             "homepage": "https://symfony.com",
+            "abandoned": "symfony/flex",
             "time": "2018-04-03T05:04:16+00:00"
         },
         {
@@ -6144,8 +6187,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "symfony/lts": 20,
-        "oro/doctrine-extensions": 20
+        "oro/doctrine-extensions": 20,
+        "symfony/lts": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

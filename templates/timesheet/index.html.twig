@@ -7,7 +7,6 @@
             <div class="col-lg-12">
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
-                <button class="btn">{{ button_label|default('Save') }}</button>
                 {{ form_end(form) }}
 
 
@@ -21,12 +20,13 @@
                         <th>Hours</th>
                         <th>Rate</th>
                         <th>Is Billable?</th>
+                        <th>Receipt</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% set totalHours = 0 %}
+                    {% set total = 0 %}
                     {% for row in data %}
-                        {% set totalHours = totalHours + row.hours %}
+                        {% set total = total + row.hours %}
                         <tr>
                             <td>{{ row.date | date('Y-m-d') }}</td>
                             <td>{{ row.client_name }}</td>
@@ -39,17 +39,24 @@
                             <td>{{ row.hours }}</td>
                             <td>{{ row.billableRate }}</td>
                             <td>{{ row.isBillable ? 'Yes': 'No' }}</td>
+                            <td>
+                                {% if row.receiptId %}
+                                    <a href="{{ path('receipt_show', {id: row.receiptId}) }}">Receipt</a>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
                         <td colspan="4"></td>
-                        <td>{{ totalHours }}</td>
-                        <td colspan="2"></td>
+                        <td>{{ total }}</td>
+                        <td colspan="3"></td>
                     </tr>
                     </tfoot>
                 </table>
+                <p>Total uninvoiced hours: {{ totalHours }}</p>
+                <p>Total uninvoiced price: {{ totalPrice }}</p>
             </div>
         </div>
     </div>

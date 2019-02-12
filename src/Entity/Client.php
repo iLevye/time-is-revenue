@@ -44,10 +44,36 @@ class Client
      */
     private $isArchived = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Receipt", mappedBy="client")
+     */
+    private $receipts;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $invoiceEmail;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $invoiceName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $invoiceAddress;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $btw;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->payments = new ArrayCollection();
+        $this->receipts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,6 +180,85 @@ class Client
     public function setIsArchived(bool $isArchived): self
     {
         $this->isArchived = $isArchived;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Receipt[]
+     */
+    public function getReceipts(): Collection
+    {
+        return $this->receipts;
+    }
+
+    public function addReceipt(Receipt $receipt): self
+    {
+        if (!$this->receipts->contains($receipt)) {
+            $this->receipts[] = $receipt;
+            $receipt->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceipt(Receipt $receipt): self
+    {
+        if ($this->receipts->contains($receipt)) {
+            $this->receipts->removeElement($receipt);
+            // set the owning side to null (unless already changed)
+            if ($receipt->getClient() === $this) {
+                $receipt->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInvoiceEmail(): ?string
+    {
+        return $this->invoiceEmail;
+    }
+
+    public function setInvoiceEmail(?string $invoiceEmail): self
+    {
+        $this->invoiceEmail = $invoiceEmail;
+
+        return $this;
+    }
+
+    public function getInvoiceName(): ?string
+    {
+        return $this->invoiceName;
+    }
+
+    public function setInvoiceName(?string $invoiceName): self
+    {
+        $this->invoiceName = $invoiceName;
+
+        return $this;
+    }
+
+    public function getInvoiceAddress(): ?string
+    {
+        return $this->invoiceAddress;
+    }
+
+    public function setInvoiceAddress(?string $invoiceAddress): self
+    {
+        $this->invoiceAddress = $invoiceAddress;
+
+        return $this;
+    }
+
+    public function getBtw(): ?string
+    {
+        return $this->btw;
+    }
+
+    public function setBtw(?string $btw): self
+    {
+        $this->btw = $btw;
 
         return $this;
     }

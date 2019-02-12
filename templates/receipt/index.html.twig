@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Receipt index{% endblock %}
+
+{% block body %}
+    <h1>Receipt index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CreatedAt</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>TotalHours</th>
+                <th>TotalPrice</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for receipt in receipts %}
+            <tr>
+                <td>{{ receipt.id }}</td>
+                <td>{{ receipt.createdAt ? receipt.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ receipt.startDate ? receipt.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ receipt.endDate ? receipt.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ receipt.totalHours }}</td>
+                <td>{{ receipt.totalPrice }}</td>
+                <td>
+                    <a href="{{ path('receipt_show', {'id': receipt.id}) }}">show</a>
+                    <a href="{{ path('receipt_edit', {'id': receipt.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('receipt_new') }}">Create new</a>
+{% endblock %}
