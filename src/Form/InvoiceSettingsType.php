@@ -2,29 +2,27 @@
 
 namespace App\Form;
 
-use App\Entity\Client;
+use App\Entity\InvoiceSettings;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ClientType extends AbstractType
+class InvoiceSettingsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
-            ->add('isArchived')
-            ->add('invoiceEmail')
-            ->add('invoiceName')
-            ->add('invoiceAddress')
-            ->add('btw')
+            ->add('email')
+            ->add('tckimlik')
+            ->add('address')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Client::class,
+            'data_class' => InvoiceSettings::class,
         ]);
     }
 }

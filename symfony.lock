@@ -80,6 +80,9 @@
     "fig/link-util": {
         "version": "1.0.0"
     },
+    "fpdf/fpdf": {
+        "version": "1.81.2"
+    },
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
     },

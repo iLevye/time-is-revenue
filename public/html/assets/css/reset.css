@@ -1,0 +1,72 @@
+/* reset.css */
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Pacifico');
+
+*
+{
+	margin: 0px;
+	padding: 0px;
+	outline: none;
+	text-decoration: none;
+	font-family: 'Open Sans', sans-serif;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	border: none;
+}
+
+label, div, span, a
+{
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+::scrollbar                     { width:          3px; }
+::scrollbar-track               { background: #f1f1f1; }
+::scrollbar-thumb               { background:    #888; }
+::scrollbar-thumb:hover         { background:    #555; }
+::-webkit-scrollbar             { width:          3px; }
+::-webkit-scrollbar-track       { background: #f1f1f1; }
+::-webkit-scrollbar-thumb       { background:    #888; }
+::-webkit-scrollbar-thumb:hover { background:    #555; }
+::-moz-scrollbar                { width:          3px; }
+::-moz-scrollbar-track          { background: #f1f1f1; }
+::-moz-scrollbar-thumb          { background:    #888; }
+::-moz-scrollbar-thumb:hover    { background:    #555; }
+::-ms-scrollbar                 { width:          3px; }
+::-ms-scrollbar-track           { background: #f1f1f1; }
+::-ms-scrollbar-thumb           { background:    #888; }
+::-ms-scrollbar-thumb:hover     { background:    #555; }
+
+body
+{
+	background-color: #ECF0F1;
+}
+
+*.wrapper
+{
+	width: 100%;
+	max-width: 1200px;
+	padding: 0 30px;
+	margin: auto;
+	box-sizing: border-box;
+}
+
+main
+{
+	width: 100%;
+	float: left;
+}
+
+/* --- */
+
+@media (min-width: 0px) and (max-width: 650px)
+{
+	*.wrapper
+	{
+		padding: 0 15px;
+	}
+}

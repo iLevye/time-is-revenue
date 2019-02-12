@@ -154,6 +154,13 @@ class TaskController extends Controller
            ]);
        }
 
+       if($task->getReceipt() != null){
+           return $this->json([
+               "success"    => false,
+               "message"    => "This task invoiced. Can't start."
+           ]);
+       }
+
        $time = new Time();
        $time->setTask($task);
 

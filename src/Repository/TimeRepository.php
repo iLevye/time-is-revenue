@@ -114,24 +114,31 @@ class TimeRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getClientTimesheet(Client $client, \DateTime $startDate, \DateTime $endDate){
-        return $this->createQueryBuilder('time')
-            ->select('task.date, task.description, task.asanaUrl, project.name as project_name, client.name as client_name, sum(timestampdiff(SECOND, time.startDate, time.finishDate)) / 60 / 60 as hours, task.billableRate, task.isBillable')
+    public function getClientTimesheet(Client $client, \DateTime $startDate, \DateTime $endDate, bool $uninvoicedRows){
+        $query = $this->createQueryBuilder('time')
+            ->select('receipt.id as receiptId, task.id as taskId, task.date, task.description, task.asanaUrl, project.name as project_name, client.name as client_name, sum(timestampdiff(SECOND, time.startDate, time.finishDate)) / 60 / 60 as hours, task.billableRate, task.isBillable')
             ->leftJoin('time.task', 'task')
             ->leftJoin('task.project', 'project')
             ->leftJoin('project.client', 'client')
+            ->leftJoin('task.receipt', 'receipt')
             ->andWhere('time.finishDate is not null')
             ->andWhere('client = :client')
             ->andWhere('time.startDate > :startDate')
-            ->andWhere('time.startDate < :endDate')
-            ->setParameters([
+            ->andWhere('time.startDate < :endDate');
+
+            if ($uninvoicedRows){
+                $query->andWhere('task.receipt is null');
+            }
+
+            $query->setParameters([
                 'client' => $client,
                 'startDate' => $startDate,
                 'endDate' => $endDate
             ])
             ->groupBy('task.id')
-            ->orderBy('task.id', 'desc')
-            ->getQuery()
+            ->orderBy('task.id', 'desc');
+
+        return $query->getQuery()
             ->getArrayResult();
     }
 

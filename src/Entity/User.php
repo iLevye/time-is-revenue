@@ -30,11 +30,22 @@ class User extends BaseUser
      */
     private $authorizedWorkspaces;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Receipt", mappedBy="user")
+     */
+    private $receipts;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\InvoiceSettings", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $invoiceSettings;
+
     public function __construct()
     {
         parent::__construct();
         $this->workspaces = new ArrayCollection();
         $this->authorizedWorkspaces = new ArrayCollection();
+        $this->receipts = new ArrayCollection();
         // your own logic
     }
 
@@ -92,6 +103,54 @@ class User extends BaseUser
         if ($this->authorizedWorkspaces->contains($authorizedWorkspace)) {
             $this->authorizedWorkspaces->removeElement($authorizedWorkspace);
             $authorizedWorkspace->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Receipt[]
+     */
+    public function getReceipts(): Collection
+    {
+        return $this->receipts;
+    }
+
+    public function addReceipt(Receipt $receipt): self
+    {
+        if (!$this->receipts->contains($receipt)) {
+            $this->receipts[] = $receipt;
+            $receipt->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceipt(Receipt $receipt): self
+    {
+        if ($this->receipts->contains($receipt)) {
+            $this->receipts->removeElement($receipt);
+            // set the owning side to null (unless already changed)
+            if ($receipt->getUser() === $this) {
+                $receipt->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInvoiceSettings(): ?InvoiceSettings
+    {
+        return $this->invoiceSettings;
+    }
+
+    public function setInvoiceSettings(InvoiceSettings $invoiceSettings): self
+    {
+        $this->invoiceSettings = $invoiceSettings;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $invoiceSettings->getUser()) {
+            $invoiceSettings->setUser($this);
         }
 
         return $this;
