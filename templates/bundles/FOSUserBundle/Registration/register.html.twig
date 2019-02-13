@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/login.css') }}"/>
+    <title>Woney | Register</title>
+</head>
+<body>
+<div id="form-area">
+    <div id="form">
+        <div id="bals"><span></span><span></span><span></span><span></span></div>
+        <div id="logo">
+            <div>Woney</div>
+            <span>Time is money</span>
+        </div>
+        {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+        {{ form_widget(form) }}
+        <button type="submit" name="_submit">Register</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+</body>
+</html>

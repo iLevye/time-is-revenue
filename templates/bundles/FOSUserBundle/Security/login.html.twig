@@ -1,0 +1,59 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/login.css') }}"/>
+    <title>Woney | Login</title>
+</head>
+<body>
+<div id="bg"></div>
+<div id="form-area">
+    <div id="form">
+        <div id="bals"><span></span><span></span><span></span><span></span></div>
+        <div id="logo">
+            <div>Woney</div>
+            <span>Time is money</span>
+        </div>
+        {% if error %}
+            <div style="
+                width: 100%;
+                text-align: center;
+                font-family: 'Comic Sans MS', sans-serif;
+                color: white;
+                font-size: 28px;
+                float: left;
+                height: 50px;
+            ">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                {% if csrf_token %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                {% endif %}
+                <label for="username">
+                    <div>E-Mail</div>
+                    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" autocomplete="username" />
+                </label>
+
+                <label for="password">
+                    <div>{{ 'security.login.password'|trans }}</div>
+                    <input type="password" id="password" name="_password" required="required" autocomplete="current-password" />
+                </label>
+
+                <label for="remember_me">
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                    <span>{{ 'security.login.remember_me'|trans }}</span>
+                </label>
+                <button type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}">Log in</button>
+            </form>
+        <div id="hr2txt">
+            <span></span>
+            <div>OR</div>
+        </div>
+        <div id="registerBtnArea">
+            <a href="{{ path('fos_user_registration_register') }}">Register for New Account</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
