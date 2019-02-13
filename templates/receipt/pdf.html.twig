@@ -55,6 +55,11 @@
                             Receipt {{ receipt.id }}
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center; font-size: 18px;">
+                            Date: {{ receipt.createdAt | date('d M Y') }}
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>
