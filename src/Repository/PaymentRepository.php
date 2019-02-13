@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Payment;
+use App\Entity\Workspace;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,22 +20,20 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
-//    /**
-//     * @return Payment[] Returns an array of Payment objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Payment[] Returns an array of Payment objects
+     */
+    public function getUserPayments(Workspace $workspace)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('p.workspace = :workspace')
+            ->setParameter('workspace', $workspace)
+            ->orderBy('p.id', 'desc')
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Payment

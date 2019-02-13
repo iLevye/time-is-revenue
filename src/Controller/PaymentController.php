@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Payment;
+use App\Entity\User;
 use App\Form\PaymentType;
 use App\Repository\PaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,7 +22,10 @@ class PaymentController extends Controller
      */
     public function index(PaymentRepository $paymentRepository): Response
     {
-        return $this->render('payment/index.html.twig', ['payments' => $paymentRepository->findAll()]);
+        /** @var User $user */
+        $user = $this->getUser();
+        $payments = $paymentRepository->getUserPayments($user->getWorkspaces()[0]);
+        return $this->render('payment/index.html.twig', ['payments' => $payments]);
     }
 
     /**
@@ -40,6 +44,7 @@ class PaymentController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $payment->setWorkspace($workspace);
             $em->persist($payment);
             $em->flush();
 
