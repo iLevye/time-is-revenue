@@ -1,0 +1,65 @@
+header
+{
+	width: 100%;
+	height: 50px;
+	float: left;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 10;
+	background-color: #2ECC71;
+	border-bottom: 2px solid #27AE60;
+}
+
+header a#logo
+{
+	width: auto;
+	height: auto;
+	margin-top: -10px;
+	padding: 8px;
+	float: left;
+	position: relative;
+	background-color: #fff;
+	border-radius: 0 0 6px 6px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.2);
+	font-family: 'Pacifico', cursive;
+	color: #27AE60;
+	font-size: 25px;
+	cursor: pointer;
+
+	transform: rotate(-10deg);
+	-webkit-transform: rotate(-10deg);
+	-moz-transform: rotate(-10deg);
+	-ms-transform: rotate(-10deg);
+}
+
+header nav
+{
+	width: auto;
+	float: right;
+}
+
+header nav a.nav-link
+{
+	width: auto;
+	line-height: 20px;
+	padding: 15px 0px;
+	margin-left: 20px;
+	float: left;
+	color: #ffff;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+header nav a.nav-link.selected
+{
+	border-bottom: 2px solid #fff;
+	/*color: #2C3E50;*/
+}
+
+div#header-clear
+{
+	width: 100%;
+	height: 52px;
+	float: left;
+}
