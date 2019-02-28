@@ -33,38 +33,37 @@
             oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
             var labels = getDaysArray(oneWeekAgo,new Date());
             var datasets = [];
-            console.log(datasets);
             $.getJSON("/graphs.json", function(chartData){
                 createdLabels = [];
                 for(i in chartData){
-                    if(createdLabels.indexOf(chartData[i].date) == -1){
+
+                    console.log("i", i);
+                    console.log(chartData[i]);
+                    if(createdLabels.indexOf(chartData[i].date) == -1) {
                         createdLabels.push(chartData[i].date);
-                        var projectIndex = datasets.findIndex(function(x){
-                            return chartData[i].project_name == x.label;
+                    }
+                    var projectIndex = datasets.findIndex(function(x){
+                        return chartData[i].project_name == x.label;
+                    });
+                    if(projectIndex == -1){
+                        var color = chartData[i].color == null ? getRandomColor() : chartData[i].color;
+                        datasets.push({
+                            date: chartData[i].date,
+                            label: chartData[i].project_name,
+                            backgroundColor: color,
+                            data: []
                         });
-                        if(projectIndex == -1){
-                            var color = chartData[i].color == null ? getRandomColor() : chartData[i].color;
-                            datasets.push({
-                                date: chartData[i].date,
-                                label: chartData[i].project_name,
-                                backgroundColor: color,
-                                data: []
-                            });
-                        }
                     }
 
                     var labelIndex = labels.findIndex(function(x){
                         return x == chartData[i].date;
                     });
-
                     var datasetIndex = datasets.findIndex(function(x){
                         return x.label == chartData[i].project_name;
                     });
-
                     datasets[datasetIndex].data[labelIndex] = chartData[i].hours || 0;
                 }
-                console.log(labels);
-                console.log(datasets);
+
                 initChart({
                     labels: labels,
                     datasets: datasets
