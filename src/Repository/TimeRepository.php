@@ -142,4 +142,26 @@ class TimeRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function getDailyProjectHours(Workspace $workspace, \DateTime $startDate, \DateTime $endDate){
+        $query = $this->createQueryBuilder('time')
+            ->select('concat(task.date, project.id) as group, DATE_FORMAT(task.date, \'%Y-%m-%d\') as date, project.id, project.color, project.name as project_name, sum(timestampdiff(SECOND, time.startDate, time.finishDate)) / 60 / 60 as hours')
+            ->leftJoin('time.task', 'task')
+            ->leftJoin('task.project', 'project')
+            ->andWhere('time.finishDate is not null')
+            ->andWhere('task.workspace = :workspace')
+            ->andWhere('time.startDate > :startDate')
+            ->andWhere('time.startDate < :endDate');
+
+        $query->setParameters([
+            'workspace' => $workspace,
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ])
+        ->groupBy('group')
+        ->orderBy('task.id', 'desc');
+
+        return $query->getQuery()
+            ->getArrayResult();
+    }
+
 }

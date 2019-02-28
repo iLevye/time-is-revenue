@@ -30,3 +30,5 @@ doctrine:
         dql:
             numeric_functions:
                 timestampdiff:  Oro\ORM\Query\AST\Functions\Numeric\TimestampDiff
+            datetime_functions:
+                date_format: Oro\ORM\Query\AST\Functions\String\DateFormat

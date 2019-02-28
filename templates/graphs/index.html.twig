@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello {{ controller_name }}!{% endblock %}
+
+{% block body %}
+    <script type="text/javascript">
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function dateFormat(date) {
+            var pad = function(num) { return ('00'+num).slice(-2) };
+            return date.getUTCFullYear()+'-'+pad(date.getUTCMonth() + 1)+"-"+pad(date.getUTCDate());
+        };
+        function getDaysArray(s,e) {
+            for(var a=[],d=s;d<=e;d.setDate(d.getDate()+1)){ a.push(dateFormat(new Date(d)));}return a;
+        };
+
+    </script>
+    <script type="text/javascript" src="{{ asset('bower_components/chart.js/dist/Chart.bundle.min.js') }}"></script>
+    <div style="width: 75%">
+        <canvas id="canvas"></canvas>
+    </div>
+    <button id="randomizeData">Randomize Data</button>
+    <script>
+        $(document).ready(function(){
+            var labels = getDaysArray(new Date("2019-01-01"),new Date("2019-02-15"));
+            var datasets = [];
+            console.log(datasets);
+            $.getJSON("/graphs.json", function(chartData){
+                createdLabels = [];
+                for(i in chartData){
+                    if(createdLabels.indexOf(chartData[i].date) == -1){
+                        createdLabels.push(chartData[i].date);
+                        var projectIndex = datasets.findIndex(function(x){
+                            return chartData[i].project_name == x.label;
+                        });
+                        if(projectIndex == -1){
+                            var color = chartData[i].color == null ? getRandomColor() : chartData[i].color;
+                            datasets.push({
+                                date: chartData[i].date,
+                                label: chartData[i].project_name,
+                                backgroundColor: color,
+                                data: []
+                            });
+                        }
+                    }
+
+                    var labelIndex = labels.findIndex(function(x){
+                        return x == chartData[i].date;
+                    });
+
+                    var datasetIndex = datasets.findIndex(function(x){
+                        return x.label == chartData[i].project_name;
+                    });
+
+                    datasets[datasetIndex].data[labelIndex] = chartData[i].hours || 0;
+                }
+                console.log(labels);
+                console.log(datasets);
+                initChart({
+                    labels: labels,
+                    datasets: datasets
+                });
+            });
+        });
+
+        function initChart(data){
+            var ctx = document.getElementById('canvas').getContext('2d');
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Chart.js Bar Chart - Stacked'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            stacked: true,
+                        }],
+                        yAxes: [{
+                            stacked: true
+                        }]
+                    }
+                }
+            });
+        };
+    </script>
+{% endblock %}
