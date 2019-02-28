@@ -29,7 +29,9 @@
     <button id="randomizeData">Randomize Data</button>
     <script>
         $(document).ready(function(){
-            var labels = getDaysArray(new Date("2019-01-01"),new Date("2019-02-15"));
+            var oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            var labels = getDaysArray(oneWeekAgo,new Date());
             var datasets = [];
             console.log(datasets);
             $.getJSON("/graphs.json", function(chartData){

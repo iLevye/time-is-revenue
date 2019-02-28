@@ -19,7 +19,7 @@ class GraphsController extends AbstractController
         $workspace = $user->getWorkspaces()[0];
 
 
-        $data = $timeRepository->getDailyProjectHours($workspace, new \DateTime('2019-01-01'), new \DateTime('2019-02-15'));
+        $data = $timeRepository->getDailyProjectHours($workspace, new \DateTime('1 week ago'), new \DateTime('now'));
 
         return $this->render('graphs/index.html.twig', [
             'controller_name' => 'GraphsController',
@@ -34,7 +34,7 @@ class GraphsController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $workspace = $user->getWorkspaces()[0];
-        $data = $timeRepository->getDailyProjectHours($workspace, new \DateTime('2019-01-01'), new \DateTime('2019-02-15'));
+        $data = $timeRepository->getDailyProjectHours($workspace, new \DateTime('1 week ago'), new \DateTime('now'));
 
         return $this->json($data);
     }
