@@ -30,7 +30,7 @@
     <script>
         $(document).ready(function(){
             var oneWeekAgo = new Date();
-            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 30);
             var labels = getDaysArray(oneWeekAgo,new Date());
             var datasets = [];
             $.getJSON("/graphs.json", function(chartData){
