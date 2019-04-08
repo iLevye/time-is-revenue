@@ -36,7 +36,7 @@
                                     <a href="{{ row.asanaUrl }}" target="_blank">asana</a>
                                 {% endif %}
                             </td>
-                            <td>{{ row.hours }}</td>
+                            <td>{{ row.hours * 60 }}</td>
                             <td>{{ row.billableRate }}</td>
                             <td>{{ row.isBillable ? 'Yes': 'No' }}</td>
                             <td>
