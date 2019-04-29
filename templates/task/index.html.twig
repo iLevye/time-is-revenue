@@ -69,6 +69,7 @@
     <script>
         $(document).ready(function(){
             $(".start-timer").click(function(){
+                $(this).parents("tr").attr("data-running", "1");
                 var taskId = $(this).parents("tr").data("taskid");
                 var td = $(this).parents("td");
                 $.post("/task/" + taskId + "/start", null, function(d){
@@ -89,6 +90,7 @@
 
             $(".stop-timer").click(function(){
                 var taskId = $(this).parents("tr").data("taskid");
+                $(this).parents("tr").data("running", "0");
                 var td = $(this).parents("td");
                 $.post("/task/" + taskId + "/stop", null, function(d){
                     if(d.success){
@@ -114,4 +116,11 @@
     </script>
 {% endblock %}
 
+{% block stylesheets %}
+    <style>
+        tr[data-running="1"] {
+            background-color: yellow;
+        }
+    </style>
+{% endblock %}
 {% block title %}Task index{% endblock %}
