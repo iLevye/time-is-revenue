@@ -83,6 +83,11 @@ class TaskController extends Controller
             $task->setWorkspace($workspace);
             $em = $this->getDoctrine()->getManager();
             $em->persist($task);
+
+            $time = new Time();
+            $time->setTask($task);
+            $em->persist($time);
+
             $em->flush();
 
             return $this->redirectToRoute('task_index');
