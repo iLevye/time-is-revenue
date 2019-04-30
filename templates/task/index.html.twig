@@ -2,8 +2,34 @@
 
 
 {% block body %}
-    <h1>Task index</h1>
 
+    <script>
+        var interval;
+        var seconds;
+
+        function secondsToHms(d) {
+            d = Number(d);
+            var h = Math.floor(d / 3600);
+            var m = Math.floor(d % 3600 / 60);
+            var s = Math.floor(d % 3600 % 60);
+
+            var hDisplay = h + ":";
+            var mDisplay = m + ":";
+            var sDisplay = s + ":";
+            return hDisplay + mDisplay + sDisplay;
+        }
+
+        function startTitleTimer(){
+            interval = setInterval(function(){
+                document.title = secondsToHms(seconds) + " running";
+                seconds++;
+            }, 1000);
+        }
+
+        function stopTitleTimer(){
+            clearInterval(interval);
+        }
+    </script>
     <a href="{{ path('task_new') }}">Create new</a>
     <table class="table">
         <thead>
@@ -21,6 +47,8 @@
             <tr data-taskid="{{ task.id }}" data-elapsed="{{ task.elapsedTime }}" data-running="{{ task.isRunning ? '1' : '0'}}" data-startedAt="{{ task.lastTimeStartedAt | date('Y-m-d H:i:s') }}">
                 {% if task.isRunning %}
                     <script type="text/javascript">
+                        seconds = {{ task.elapsedTime }};
+                        startTitleTimer();
                         $(document).ready(function(){
                            $("#timer_task_{{ task.id }}").timer({
                                seconds: {{ task.elapsedTime }}
@@ -67,6 +95,7 @@
 {% block javascripts %}
     <script src="/bower_components/timer.jquery/dist/timer.jquery.min.js"></script>
     <script>
+
         $(document).ready(function(){
             $(".start-timer").click(function(){
                 $(this).parents("tr").attr("data-running", "1");
@@ -74,7 +103,8 @@
                 var td = $(this).parents("td");
                 $.post("/task/" + taskId + "/start", null, function(d){
                     if(d.success){
-                        var seconds = td.find(".elapsedTime").data("seconds");
+                        seconds = td.find(".elapsedTime").data("seconds");
+                        startTitleTimer();
                         td.find(".timer").timer({
                             seconds : seconds
                         });
