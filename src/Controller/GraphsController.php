@@ -20,6 +20,25 @@ class GraphsController extends AbstractController
 
 
         $data = $timeRepository->getDailyProjectHours($workspace, new \DateTime('30 day ago'), new \DateTime('now'));
+        $monthlyTotal = 0;
+        $weeklyTotal = 0;
+        $lastWeek = new \DateTime('1 week ago');
+        foreach($data as $d){
+            $monthlyTotal += $d['hours'];
+            if($d['date'] >= $lastWeek->format('Y-m-d')){
+                $weeklyTotal += $d['hours'];
+            }
+        }
+
+        $data['dailyAvg'] = array(
+            "last30day"  => $monthlyTotal / 30,
+            "lastWeek" => $weeklyTotal / 7
+        );
+
+        $data['totals'] = array(
+            "monthlyTotal" => $monthlyTotal,
+            "weeklyTotal" => $weeklyTotal
+        );
 
         return $this->render('graphs/index.html.twig', [
             'controller_name' => 'GraphsController',
