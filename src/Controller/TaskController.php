@@ -130,6 +130,18 @@ class TaskController extends Controller
     {
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
+
+            /** @var TimeRepository $timeRepository */
+            $timeRepository = $this->getDoctrine()->getRepository(Time::class);
+            $times = $timeRepository->findBy([
+                "task" => $task
+            ]);
+            if(count($times) > 0){
+                foreach($times as $time){
+                    $em->remove($time);
+                }
+            }
+
             $em->remove($task);
             $em->flush();
         }
