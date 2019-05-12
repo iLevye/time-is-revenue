@@ -31,8 +31,8 @@ class GraphsController extends AbstractController
         }
 
         $data['dailyAvg'] = array(
-            "last30day"  => $monthlyTotal / 30,
-            "lastWeek" => $weeklyTotal / 7
+            "last30day"  => $monthlyTotal / 22,
+            "lastWeek" => $weeklyTotal / 5
         );
 
         $data['totals'] = array(
