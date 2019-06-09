@@ -6,6 +6,7 @@
     <script>
         var interval;
         var seconds;
+        var running = false;
 
         function secondsToHms(d) {
             d = Number(d);
@@ -24,10 +25,11 @@
                 document.title = secondsToHms(seconds) + " running";
                 seconds++;
             }, 1000);
-        }
 
-        function stopTitleTimer(){
-            clearInterval(interval);
+            window.onbeforeunload = function() {
+                return 'You have not yet saved your work.Do you want to continue? Doing so, may cause loss of your work' ;
+            }
+
         }
     </script>
     <a href="{{ path('task_new') }}">Create new</a>
@@ -48,6 +50,7 @@
                 {% if task.isRunning %}
                     <script type="text/javascript">
                         seconds = {{ task.elapsedTime }};
+                        running = true;
                         startTitleTimer();
                         $(document).ready(function(){
                            $("#timer_task_{{ task.id }}").timer({
@@ -104,6 +107,7 @@
                 $.post("/task/" + taskId + "/start", null, function(d){
                     if(d.success){
                         seconds = td.find(".elapsedTime").data("seconds");
+                        running = true;
                         startTitleTimer();
                         td.find(".timer").timer({
                             seconds : seconds
@@ -119,6 +123,8 @@
             });
 
             $(".stop-timer").click(function(){
+                running = false;
+                window.onbeforeunload = null;
                 var taskId = $(this).parents("tr").data("taskid");
                 $(this).parents("tr").data("running", "0");
                 var td = $(this).parents("td");
