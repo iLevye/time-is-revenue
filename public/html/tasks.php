@@ -29,7 +29,7 @@
 
 						</div>
 
-						<div class="lines">
+						<div class="lines" id="task-items">
 
 							<div class="line active">
 							
@@ -136,6 +136,8 @@
 			</section>
 
 		</main>
+
+		<script type="text/javascript" src="assets/js/core.js"></script>
 
 	</body>
 </html>
