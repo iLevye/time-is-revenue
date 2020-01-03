@@ -28,8 +28,8 @@ class ReceiptRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->orderBy('r.id', 'desc')
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;
