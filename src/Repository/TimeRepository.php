@@ -56,6 +56,25 @@ class TimeRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Time|null
+     */
+    public function getRunningTime(Workspace $workspace): ?Time
+    {
+        return $this->createQueryBuilder('t')
+
+            ->leftJoin('t.task', 'task')
+            ->leftJoin('task.workspace', 'workspace')
+            ->where('task.workspace = :workspace')
+            ->andWhere('t.finishDate is null')
+            ->setParameter('workspace', $workspace)
+            ->orderBy('t.id', 'desc')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+    /**
      * @param $task
      * @return int|null
      */
