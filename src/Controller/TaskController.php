@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\AsanaProject;
 use App\Entity\Project;
 use App\Entity\Task;
 use App\Entity\Time;
+use App\Entity\User;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Repository\TimeRepository;
+use App\Services\Asana;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -62,7 +65,33 @@ class TaskController extends Controller
             }
         }
 
-        return $this->render('task/index.html.twig', ['tasks' => $tasks]);
+        $asanaTasks = [];
+        if($user->getAsanaAccessToken()){
+            $asanaProjectRepository = $this->getDoctrine()->getRepository(AsanaProject::class);
+            $asanaProjects = $asanaProjectRepository->findBy([
+                'user' => $user,
+                'isPinned' => true
+            ]);
+
+            if(count($asanaProjects) > 0){
+                $asana = new Asana($user->getAsanaAccessToken());
+                foreach($asanaProjects as $asanaProject){
+                    $items = $asana->getTasks($asanaProject->getAsanaId());
+                    foreach($items as $item){
+
+                        $item->project_name = $asanaProject->getProject()->getName();
+                        dump($item);
+                        $asanaTasks[] = $item;
+                    }
+                }
+            }
+        }
+
+        return $this->render('task/index.html.twig', [
+            'tasks' => $tasks,
+            'asanaTasks' => $asanaTasks,
+            'asanaProjects' => $asanaProjects
+        ]);
     }
 
     /**

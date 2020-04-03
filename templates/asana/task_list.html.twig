@@ -1,0 +1,18 @@
+<h2>Tasks from Asana</h2>
+<table class="table">
+    {% for task in tasks %}
+        {% dump(task) %}
+        <tr>
+            <td>
+                {{ task.project_name }}
+            </td>
+            <td>
+               {{ task.name }}
+            </td>
+            <td>
+                <button class="btn-outline-primary">Complete</button>
+                <button class="btn-outline-primary">Start</button>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

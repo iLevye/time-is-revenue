@@ -1,0 +1,12 @@
+<h2>Workspaces</h2>
+<table class="table">
+    {% for workspace in workspaces %}
+        <tr>
+            <td>
+                <a class="btn-outline-dark" href="{{ path('list_projects', {workspaceId: workspace.gid}) }}">
+                    {{ workspace.name }}
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

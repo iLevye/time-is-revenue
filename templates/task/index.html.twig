@@ -32,6 +32,49 @@
 
         }
     </script>
+
+    {% if asanaTasks %}
+
+        <script type="text/javascript">
+
+            $(document).on('click', '.open-asanaTasks', function () {
+                $('#asanaTasks').show();
+            });
+
+            $(document).on('click', '.close-asanaTasks', function () {
+                $('#asanaTasks').hide();
+            });
+        </script>
+        <div class="open-asanaTasks">Asana Tasks</div>
+
+        <div id="asanaTasks" style="display:none;position: absolute;
+    background: lightblue;
+    left: 50px;
+    right: 50px;
+    top: 50px;
+    bottom: 50px;
+    overflow: scroll;">
+            <div style="position: fixed;
+    background: black;
+    color: white;
+    top: 25px;
+    right: 25px;
+    padding: 10px 20px;
+    border-radius: 45px;
+    width: 100px;
+    text-align: center;
+    height: 45px;
+    cursor: pointer;" class="close-asanaTasks">
+                Kapat
+            </div>
+
+            {% for asanaProject in asanaProjects %}
+                {{ asanaProject.asanaId }}
+            {% endfor %}
+            {% include 'asana/task_list.html.twig' with { tasks: asanaTasks } %}
+        </div>
+    {% endif %}
+
     <a href="{{ path('task_new') }}">Create new</a>
     <table class="table">
         <thead>

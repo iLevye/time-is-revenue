@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User extends BaseUser
 {
@@ -40,12 +41,28 @@ class User extends BaseUser
      */
     private $invoiceSettings;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $asanaAccessToken;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AsanaProject", mappedBy="user")
+     */
+    private $asanaProjects;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $telegramReportChatId;
+
     public function __construct()
     {
         parent::__construct();
         $this->workspaces = new ArrayCollection();
         $this->authorizedWorkspaces = new ArrayCollection();
         $this->receipts = new ArrayCollection();
+        $this->asanaProjects = new ArrayCollection();
         // your own logic
     }
 
@@ -152,6 +169,61 @@ class User extends BaseUser
         if ($this !== $invoiceSettings->getUser()) {
             $invoiceSettings->setUser($this);
         }
+
+        return $this;
+    }
+
+    public function getAsanaAccessToken(): ?string
+    {
+        return $this->asanaAccessToken;
+    }
+
+    public function setAsanaAccessToken(?string $asanaAccessToken): self
+    {
+        $this->asanaAccessToken = $asanaAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AsanaProject[]
+     */
+    public function getAsanaProjects(): Collection
+    {
+        return $this->asanaProjects;
+    }
+
+    public function addAsanaProject(AsanaProject $asanaProject): self
+    {
+        if (!$this->asanaProjects->contains($asanaProject)) {
+            $this->asanaProjects[] = $asanaProject;
+            $asanaProject->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAsanaProject(AsanaProject $asanaProject): self
+    {
+        if ($this->asanaProjects->contains($asanaProject)) {
+            $this->asanaProjects->removeElement($asanaProject);
+            // set the owning side to null (unless already changed)
+            if ($asanaProject->getUser() === $this) {
+                $asanaProject->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTelegramReportChatId(): ?string
+    {
+        return $this->telegramReportChatId;
+    }
+
+    public function setTelegramReportChatId(string $telegramReportChatId): self
+    {
+        $this->telegramReportChatId = $telegramReportChatId;
 
         return $this;
     }

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+        <h1>Asana</h1>
+        <h2>Set Asana Personal Access Token</h2>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+        {% if updateStatus %}
+            <div class="alert alert-success">
+                <p>Token updated!</p>
+            </div>
+        {% endif %}
+
+        <h2>Linked Projects</h2>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Asana Name</th>
+                <th>IsPinned</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for asana_project in asanaProjects %}
+                <tr>
+                    <td>{{ asana_project.id }}</td>
+                    <td>{{ asana_project.name }}</td>
+                    <td>{{ asana_project.isPinned ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <a href="{{ path('asana_project_show', {'id': asana_project.id}) }}">show</a>
+                        <form method="post" action="{{ path('asana_project_delete', {'id': asana_project.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ asana_project.id) }}">
+                            <button class="btn">Delete</button>
+                        </form>
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if workspaces is not empty %}
+            {% include 'asana/workspace_list.html.twig' %}
+        {% endif %}
+    </div>
+{% endblock %}

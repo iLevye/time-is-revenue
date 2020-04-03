@@ -1,0 +1,37 @@
+<h2>Projects</h2>
+<table class="table">
+    {% for project in projects %}
+        {% dump(project) %}
+        <tr data-asanaprojectid="{{ project.gid }}">
+            <td>
+                <a class="btn-outline-dark" href="{{ path('list_tasks', {projectId: project.gid}) }}">
+                    {{ project.name }}
+                </a>
+            </td>
+            <td>
+                <select name="timerProjects">
+                    {% for item in timerProjects %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <button class="btn btn-outline-primary pinProject">Pin</button>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<script type="text/javascript">
+    $(document).on('click', '.pinProject', function () {
+        var asanaProjectId = $(this).parents('tr').data('asanaprojectid');
+        var timerProjectId = $(this).parents('tr').find('[name=timerProjects]').val();
+
+        location.href = "{{ path('pin_project', {
+            asanaProjectId: '--asanaProjectId--',
+            projectId: '--projectId--'
+        }) }}"
+            .replace('--asanaProjectId--', asanaProjectId)
+            .replace('--projectId--', timerProjectId);
+    });
+</script>

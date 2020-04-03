@@ -54,6 +54,11 @@ class Project
      */
     private $color;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\AsanaProject", mappedBy="project", cascade={"persist", "remove"})
+     */
+    private $asanaProject;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -168,6 +173,23 @@ class Project
     public function setColor(?string $color): self
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function getAsanaProject(): ?AsanaProject
+    {
+        return $this->asanaProject;
+    }
+
+    public function setAsanaProject(AsanaProject $asanaProject): self
+    {
+        $this->asanaProject = $asanaProject;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $asanaProject->getProject()) {
+            $asanaProject->setProject($this);
+        }
 
         return $this;
     }

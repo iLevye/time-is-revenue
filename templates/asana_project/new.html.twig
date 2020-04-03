@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New AsanaProject{% endblock %}
+
+{% block body %}
+    <h1>Create new AsanaProject</h1>
+
+    {{ include('asana_project/_form.html.twig') }}
+
+    <a href="{{ path('asana_project_index') }}">back to list</a>
+{% endblock %}

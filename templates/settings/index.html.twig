@@ -7,14 +7,21 @@
 <div class="container">
     <h1>Settings</h1>
     <h2>Invoice Settings</h2>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-success">{{ button_label|default('Save') }}</button>
-    {{ form_end(form) }}
     {% if updateStatus %}
         <div class="alert alert-success">
             <p>Settings updated!</p>
         </div>
     {% endif %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+    <h2>Telegram Settings</h2>
+    {{ form_start(telegramForm) }}
+    {{ form_widget(telegramForm) }}
+    <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+    {{ form_end(telegramForm) }}
 </div>
 {% endblock %}
