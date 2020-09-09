@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
 use App\Entity\Receipt;
 use App\Entity\User;
 use App\Form\ReceiptType;
@@ -32,8 +33,13 @@ class ReceiptController extends Controller
      */
     public function new(Request $request): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findBy(['workspace' => $workspace]);
+
         $receipt = new Receipt();
-        $form = $this->createForm(ReceiptType::class, $receipt);
+        $form = $this->createForm(ReceiptType::class, $receipt, ['clients' => $clients, 'users' => [$user]]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -88,7 +94,12 @@ class ReceiptController extends Controller
      */
     public function edit(Request $request, Receipt $receipt): Response
     {
-        $form = $this->createForm(ReceiptType::class, $receipt);
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findBy(['workspace' => $workspace]);
+
+        $form = $this->createForm(ReceiptType::class, $receipt, ['clients' => $clients, 'users' => [$user]]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -142,7 +142,12 @@ class TaskController extends Controller
      */
     public function edit(Request $request, Task $task): Response
     {
-        $form = $this->createForm(TaskType::class, $task);
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $projects = $this->getDoctrine()->getRepository(Project::class)->findBy(['workspace' => $workspace]);
+
+        $form = $this->createForm(TaskType::class, $task, ['projects' => $projects]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

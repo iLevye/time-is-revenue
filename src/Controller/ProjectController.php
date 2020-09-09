@@ -76,7 +76,12 @@ class ProjectController extends Controller
      */
     public function edit(Request $request, Project $project): Response
     {
-        $form = $this->createForm(ProjectType::class, $project);
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findBy(['workspace' => $workspace]);
+
+        $form = $this->createForm(ProjectType::class, $project, ['clients' => $clients]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

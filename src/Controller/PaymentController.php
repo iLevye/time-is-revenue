@@ -70,7 +70,12 @@ class PaymentController extends Controller
      */
     public function edit(Request $request, Payment $payment): Response
     {
-        $form = $this->createForm(PaymentType::class, $payment);
+        /** @var User $user */
+        $user = $this->getUser();
+        $workspace = $user->getWorkspaces()[0];
+        $clients = $this->getDoctrine()->getRepository(Client::class)->findBy(['workspace' => $workspace]);
+
+        $form = $this->createForm(PaymentType::class, $payment, ['clients' => $clients]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
