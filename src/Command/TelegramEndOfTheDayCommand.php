@@ -64,9 +64,6 @@ class TelegramEndOfTheDayCommand extends Command
             $totalProject = 0;
             if(count($data) > 0){
                 foreach($data as $project){
-                    if($project['project_name'] == 'ige'){
-                        continue;
-                    }
                     $totalHours += $project['hours'];
                     $totalProject++;
                     $message .= $project['project_name'] . ": " . number_format($project['hours'], 1)  . '
