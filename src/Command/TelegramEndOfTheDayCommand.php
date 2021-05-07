@@ -64,29 +64,33 @@ class TelegramEndOfTheDayCommand extends Command
             $totalProject = 0;
             if(count($data) > 0){
                 foreach($data as $project){
+                    if($project['project_name'] == 'ige'){
+                        continue;
+                    }
                     $totalHours += $project['hours'];
                     $totalProject++;
                     $message .= $project['project_name'] . ": " . number_format($project['hours'], 1)  . '
 ';
                 }
-                if($totalProject > 1){
-                    $message .= ' total ' . number_format($totalHours, 1);
-                }
-                if($totalHours > 9){
-                    $message .= ' CHEATERS DETECTED!!! ???
-';
-                }else if($totalHours > 5){
-                    $message .= ' nice job!
-';
-                }else if($totalHours < 2){
-                    $message .= ' better than nothing
-';
-                }else {
-                    $message .= ' 
-';
-                }
             }else{
                 $message .= ' sifir SIFIR sifir!! O 000
+';
+            }
+
+            if($totalProject > 1){
+                $message .= ' total ' . number_format($totalHours, 1);
+            }
+            if($totalHours > 9){
+                $message .= ' CHEATERS DETECTED!!! ???
+';
+            }else if($totalHours > 5){
+                $message .= ' nice job!
+';
+            }else if($totalHours < 2){
+                $message .= ' better than nothing
+';
+            }else {
+                $message .= ' 
 ';
             }
 
